@@ -665,7 +665,7 @@ void doUpdates(void)
 
     //AFR Protection added, add default values
     configPage9.afrProtectEnabled = 0; //Disable by default
-    configPage9.afrProtectMinMAP = 90; //Is divided by 2, vlue represents 180kPa
+    configPage9.afrProtectMinMAP = 90; //Is divided by 2, value represents 180kPa
     configPage9.afrProtectMinRPM = 40; //4000 RPM min
     configPage9.afrProtectMinTPS = 160; //80% TPS min
     configPage9.afrProtectDeviation = 14; //1.4 AFR deviation    
@@ -718,7 +718,7 @@ void doUpdates(void)
     configPage15.rollingProtCutPercent[2] = 80;
     configPage15.rollingProtCutPercent[3] = 95;
 
-    //DFCO Hyster was multipled by 2 to allow a range of 0-500. Existing values must be halved
+    //DFCO Hyster was multiplied by 2 to allow a range of 0-500. Existing values must be halved
     configPage4.dfcoHyster = configPage4.dfcoHyster / 2;
 
     writeAllConfig();
@@ -727,7 +727,7 @@ void doUpdates(void)
 
   if(readEEPROMVersion() == 22)
   {
-    //202311-dev
+    //202402
     
     if( configPage10.wmiMode >= WMI_MODE_OPENLOOP ) { multiplyTableValue(wmiMapPage, 2); } //Increased PWM resolution from 0-100 to 0-200 to match VVT
 
@@ -744,6 +744,9 @@ void doUpdates(void)
     //EGO MAP Limits
     configPage9.egoMAPMax = 255, // 255 will be 510 kpa
     configPage9.egoMAPMin = 0,  // 0 will be 0 kpa
+
+    //rusEFI CAN Wideband
+    configPage2.canWBO = 0;
 
     writeAllConfig();
     storeEEPROMVersion(23);
