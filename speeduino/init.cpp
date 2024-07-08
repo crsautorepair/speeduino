@@ -288,6 +288,54 @@ void initialiseAll(void)
     o2CalibrationTable.values = o2Calibration_values;
     o2CalibrationTable.axisX = o2Calibration_bins;
     
+    shift2_1Table.valueSize = SIZE_BYTE;
+    shift2_1Table .axisSize = SIZE_BYTE;
+    shift2_1Table.xSize = 4;
+    shift2_1Table.values = configPage15.shift2_1vss;
+    shift2_1Table.axisX = configPage15.shift2_1tps;
+
+    shift1_2Table.valueSize = SIZE_BYTE;
+    shift1_2Table .axisSize = SIZE_BYTE;
+    shift1_2Table.xSize = 4;
+    shift1_2Table.values = configPage15.shift1_2vss;
+    shift1_2Table.axisX = configPage15.shift1_2tps;
+
+    shift3_2Table.valueSize = SIZE_BYTE;
+    shift3_2Table .axisSize = SIZE_BYTE;
+    shift3_2Table.xSize = 4;
+    shift3_2Table.values = configPage15.shift3_2vss;
+    shift3_2Table.axisX = configPage15.shift3_2tps;
+
+    shift2_3Table.valueSize = SIZE_BYTE;
+    shift2_3Table .axisSize = SIZE_BYTE;
+    shift2_3Table.xSize = 4;
+    shift2_3Table.values = configPage15.shift2_3vss;
+    shift2_3Table.axisX = configPage15.shift2_3tps;
+
+    shift4_3Table.valueSize = SIZE_BYTE;
+    shift4_3Table .axisSize = SIZE_BYTE;
+    shift4_3Table.xSize = 4;
+    shift4_3Table.values = configPage15.shift4_3vss;
+    shift4_3Table.axisX = configPage15.shift4_3tps;
+
+    shift3_4Table.valueSize = SIZE_BYTE;
+    shift3_4Table .axisSize = SIZE_BYTE;
+    shift3_4Table.xSize = 4;
+    shift3_4Table.values = configPage15.shift3_4vss;
+    shift3_4Table.axisX = configPage15.shift3_4tps;
+
+    unlockshiftTable.valueSize = SIZE_BYTE;
+    unlockshiftTable .axisSize = SIZE_BYTE;
+    unlockshiftTable.xSize = 4;
+    unlockshiftTable.values = configPage15.unlockshiftvss;
+    unlockshiftTable.axisX = configPage15.unlockshifttps;
+
+    lockshiftTable.valueSize = SIZE_BYTE;
+    lockshiftTable .axisSize = SIZE_BYTE;
+    lockshiftTable.xSize = 4;
+    lockshiftTable.values = configPage15.lockshiftvss;
+    lockshiftTable.axisX = configPage15.lockshifttps;
+
     //Setup the calibration tables
     loadCalibration();
 
@@ -2845,6 +2893,11 @@ void setPinMapping(byte boardID)
   if ( (configPage10.vvt2Pin != 0) && (configPage10.vvt2Pin < BOARD_MAX_IO_PINS) ) { pinVVT_2 = pinTranslate(configPage10.vvt2Pin); }
   if ( (configPage13.onboard_log_trigger_Epin != 0 ) && (configPage13.onboard_log_trigger_Epin != 0) && (configPage13.onboard_log_tr5_Epin_pin < BOARD_MAX_IO_PINS) ) { pinSDEnable = pinTranslate(configPage13.onboard_log_tr5_Epin_pin); }
   
+  if ( (configPage15.Apin != 0) && (configPage15.Apin < BOARD_MAX_IO_PINS) ) { pinA = pinTranslate(configPage15.Apin); }
+  if ( (configPage15.Bpin != 0) && (configPage15.Bpin < BOARD_MAX_IO_PINS) ) { pinB = pinTranslate(configPage15.Bpin); }
+  if ( (configPage15.Cpin != 0) && (configPage15.Cpin < BOARD_MAX_IO_PINS) ) { pinC = pinTranslate(configPage15.Cpin); }
+  if ( (configPage15.inputpinN != 0) && (configPage15.inputpinN < BOARD_MAX_IO_PINS) ) { pininputN = pinTranslate(configPage15.inputpinN); }
+  if ( (configPage15.inputpinR != 0) && (configPage15.inputpinR < BOARD_MAX_IO_PINS) ) { pininputR = pinTranslate(configPage15.inputpinR); }
 
   //Currently there's no default pin for Idle Up
   
@@ -3052,6 +3105,7 @@ void setPinMapping(byte boardID)
   {
     pinMode(pinSDEnable, INPUT);
   }
+
   if(configPage10.wmiEnabled > 0)
   {
     pinMode(pinWMIEnabled, OUTPUT);
@@ -3087,11 +3141,22 @@ void setPinMapping(byte boardID)
       pinMode(pinAirConRequest, INPUT_PULLUP);
     }
   }
-
   if((pinAirConFan > 0) && ((configPage15.airConEnable) == 1) && ((configPage15.airConFanEnabled) == 1))
   {
     pinMode(pinAirConFan, OUTPUT);
-  }  
+  }
+  if(configPage15.TrannsEnable > 0)
+  {
+    pinMode(pininputN, INPUT_PULLUP);
+    pinMode(pininputR, INPUT_PULLUP);
+    pinMode(pinA , OUTPUT); 
+    pinMode(pinB, OUTPUT);
+    if (configPage15.BpinPollarity> 0) { digitalWrite(pinB, HIGH); }
+    if(configPage15.CpinEnable > 0)    
+    {
+     pinMode(pinC, OUTPUT); 
+    }
+  }
 
   //These must come after the above pinMode statements
   triggerPri_pin_port = portInputRegister(digitalPinToPort(pinTrigger));

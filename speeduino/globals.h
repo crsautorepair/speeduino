@@ -464,6 +464,14 @@ extern struct table2D wmiAdvTable; //6 bin wmi correction table for timing advan
 extern struct table2D coolantProtectTable; //6 bin coolant temperature protection table for engine protection (2D)
 extern struct table2D fanPWMTable;
 extern struct table2D rollingCutTable;
+extern struct table2D shift2_1Table;
+extern struct table2D shift1_2Table;
+extern struct table2D shift3_2Table;
+extern struct table2D shift2_3Table;
+extern struct table2D shift4_3Table;
+extern struct table2D shift3_4Table;
+extern struct table2D unlockshiftTable;
+extern struct table2D lockshiftTable;
 
 //These are for the direct port manipulation of the injectors, coils and aux outputs
 extern volatile PORT_TYPE *inj1_pin_port;
@@ -1442,8 +1450,36 @@ struct config15 {
   int8_t rollingProtRPMDelta[4]; // Signed RPM value representing how much below the RPM limit. Divided by 10
   byte rollingProtCutPercent[4];
   
+  byte shift2_1vss[4];
+  byte shift2_1tps[4];
+  byte shift1_2vss[4];
+  byte shift1_2tps[4];
+  byte shift3_2vss[4];
+  byte shift3_2tps[4];
+  byte shift2_3vss[4];
+  byte shift2_3tps[4];
+  byte shift4_3vss[4];
+  byte shift4_3tps[4];
+  byte shift3_4vss[4];
+  byte shift3_4tps[4];
+  byte unlockshiftvss[4];
+  byte unlockshifttps[4];
+  byte lockshiftvss[4];
+  byte lockshifttps[4];
+
+  byte TrannsEnable : 1;
+  byte CpinEnable : 1;
+  byte BpinPollarity : 2;
+  byte Apin : 4;
+  byte Bpin : 4;
+  byte Cpin : 4;
+  byte ApinMaxRPMdiv100;
+  byte BpinMaxRPMdiv100;
+  byte inputpinN : 4;
+  byte inputpinR : 4;
+
   //Bytes 98-255
-  byte Unused15_98_255[150];
+  byte Unused15_98_255[81];
 
 #if defined(CORE_AVR)
   };
@@ -1533,6 +1569,12 @@ extern byte pinSDEnable; //Input for manually enabling SD logging
 extern byte pinAirConComp;    // Air conditioning compressor output
 extern byte pinAirConFan;    // Stand-alone air conditioning fan output
 extern byte pinAirConRequest; // Air conditioning request input
+
+extern byte pininputN;
+extern byte pininputR;
+extern byte pinA;
+extern byte pinB;
+extern byte pinC;
 
 /* global variables */ // from speeduino.ino
 //#ifndef UNIT_TEST

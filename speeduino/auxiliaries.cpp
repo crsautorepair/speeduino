@@ -308,7 +308,6 @@ static inline void checkAirConRPMLockout(void)
   }
 }
 
-
 /*
 Fan control
 */
@@ -1274,3 +1273,5 @@ void boostDisable(void)
   }
 }
 #endif
+
+

@@ -55,6 +55,14 @@ struct table2D wmiAdvTable; //6 bin wmi correction table for timing advance (2D)
 struct table2D coolantProtectTable;
 struct table2D fanPWMTable;
 struct table2D rollingCutTable;
+struct table2D shift2_1Table;
+struct table2D shift1_2Table;
+struct table2D shift3_2Table;
+struct table2D shift2_3Table;
+struct table2D shift4_3Table;
+struct table2D shift3_4Table;
+struct table2D unlockshiftTable;
+struct table2D lockshiftTable;
 
 /// volatile inj*_pin_port and  inj*_pin_mask vars are for the direct port manipulation of the injectors, coils and aux outputs.
 volatile PORT_TYPE *inj1_pin_port;
@@ -235,6 +243,11 @@ byte pinSDEnable;
 byte pinAirConComp;     // Air conditioning compressor output (See: auxiliaries.ino)
 byte pinAirConFan;    // Stand-alone air conditioning fan output (See: auxiliaries.ino)
 byte pinAirConRequest;  // Air conditioning request input (See: auxiliaries.ino)
+byte pininputN;
+byte pininputR;
+byte pinA;
+byte pinB;
+byte pinC;
 
 struct statuses currentStatus; /**< The master global "live" status struct. Contains all values that are updated frequently and used across modules */
 struct config2 configPage2;
