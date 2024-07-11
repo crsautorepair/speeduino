@@ -1466,17 +1466,23 @@ struct config15 {
 
   byte TrannsEnable : 1;
   byte CpinEnable : 1;
-  byte BpinPollarity : 2;
-  byte Apin : 4;
-  byte Bpin : 4;
-  byte Cpin : 4;
+  byte BpinPollarity : 1;
+  byte Apin : 5;
+  byte Bpin : 5;
+  byte Bpinunused4 : 2;
+  byte Cpin : 5;
+  byte Cpinunused4 : 2;
+
   byte ApinMaxRPMdiv100;
   byte BpinMaxRPMdiv100;
-  byte inputpinN : 4;
-  byte inputpinR : 4;
+  
+  byte inputpinN : 5;
+  byte inputpinNunused4 : 2;
+  byte inputpinR : 5;
+  byte inputpinRunused4 : 2;
 
   //Bytes 98-255
-  byte Unused15_98_255[81];
+  byte Unused15_106_255[79];
 
 #if defined(CORE_AVR)
   };
@@ -1566,12 +1572,12 @@ extern byte pinSDEnable; //Input for manually enabling SD logging
 extern byte pinAirConComp;    // Air conditioning compressor output
 extern byte pinAirConFan;    // Stand-alone air conditioning fan output
 extern byte pinAirConRequest; // Air conditioning request input
-
 extern byte pininputN;
 extern byte pininputR;
 extern byte pinA;
 extern byte pinB;
 extern byte pinC;
+
 
 /* global variables */ // from speeduino.ino
 //#ifndef UNIT_TEST
