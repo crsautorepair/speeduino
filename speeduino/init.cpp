@@ -400,6 +400,9 @@ void initialiseAll(void)
     initialiseIdle(true);
     initialiseFan();
     initialiseAirCon();
+
+    initialiseTrannsCon();
+   
     initialiseAuxPWM();
     initialiseCorrections();
     BIT_CLEAR(currentStatus.engineProtectStatus, PROTECT_IO_ERROR); //Clear the I/O error bit. The bit will be set in initialiseADC() if there is problem in there.
@@ -2933,8 +2936,7 @@ void setPinMapping(byte boardID)
   if ( (configPage15.Apin != 0) && (configPage15.Apin < BOARD_MAX_IO_PINS) ) { pinA = pinTranslate(configPage15.Apin); }
   if ( (configPage15.Bpin != 0) && (configPage15.Bpin < BOARD_MAX_IO_PINS) ) { pinB = pinTranslate(configPage15.Bpin); }
   if ( (configPage15.Cpin != 0) && (configPage15.Cpin < BOARD_MAX_IO_PINS) ) { pinC = pinTranslate(configPage15.Cpin); }
-  if ( (configPage15.inputpinN != 0) && (configPage15.inputpinN < BOARD_MAX_IO_PINS) ) { pininputN = pinTranslate(configPage15.inputpinN); }
-  if ( (configPage15.inputpinR != 0) && (configPage15.inputpinR < BOARD_MAX_IO_PINS) ) { pininputR = pinTranslate(configPage15.inputpinR); }
+  
 
   //Currently there's no default pin for Idle Up
   
@@ -3195,16 +3197,11 @@ void setPinMapping(byte boardID)
   }
   if(configPage15.TrannsEnable > 0)
   {
-    pinMode(pininputN, INPUT_PULLUP);
-    pinMode(pininputR, INPUT_PULLUP);
     pinMode(pinA , OUTPUT); 
     pinMode(pinB, OUTPUT);
-    if (configPage15.BpinPollarity> 0) { digitalWrite(pinB, HIGH); }
-    if(configPage15.CpinEnable > 0)    
-    {
-     pinMode(pinC, OUTPUT); 
-    }
+    pinMode(pinC, OUTPUT); 
   }
+  
 
   //These must come after the above pinMode statements
   triggerPri_pin_port = portInputRegister(digitalPinToPort(pinTrigger));

@@ -26,6 +26,14 @@ volatile char nextVVT;
 byte boostCounter;
 byte vvtCounter;
 
+
+
+
+
+
+
+
+
 volatile PORT_TYPE *boost_pin_port;
 volatile PINMASK_TYPE boost_pin_mask;
 volatile PORT_TYPE *n2o_stage1_pin_port;
@@ -46,6 +54,14 @@ volatile PORT_TYPE *vvt2_pin_port;
 volatile PINMASK_TYPE vvt2_pin_mask;
 volatile PORT_TYPE *fan_pin_port;
 volatile PINMASK_TYPE fan_pin_mask;
+
+volatile PORT_TYPE *A_pin_port;
+volatile PINMASK_TYPE A_pin_mask;
+volatile PORT_TYPE *B_pin_port;
+volatile PINMASK_TYPE B_pin_mask;
+volatile PORT_TYPE *C_pin_port;
+volatile PINMASK_TYPE C_pin_mask;
+
 
 #if defined(PWM_FAN_AVAILABLE)//PWM fan not available on Arduino MEGA
 volatile bool fan_pwm_state;
@@ -1277,4 +1293,69 @@ void boostDisable(void)
 }
 #endif
 
+
+void initialiseTrannsCon(void)
+{
+    if(configPage15.TrannsEnable == 1)
+  {
+      A_pin_port = portOutputRegister(digitalPinToPort(pinA));
+      A_pin_mask = digitalPinToBitMask(pinA);
+       
+      B_pin_port = portOutputRegister(digitalPinToPort(pinB));
+      B_pin_mask = digitalPinToBitMask(pinB);
+
+      C_pin_port = portOutputRegister(digitalPinToPort(pinC));
+      C_pin_mask = digitalPinToBitMask(pinC);
+
+            A_PIN_OFF();     
+            B_PIN_OFF();
+            C_PIN_OFF();
+  }           
+     
+}
+
+void TRANNSCONTROL(void)
+{
+    if(configPage15.TrannsEnable == 1)
+  {  
+
+           byte vss3_4Limit = table2D_getValue(&shift3_4Table, currentStatus.TPS);
+            if(currentStatus.vss > vss3_4Limit){A_PIN_ON();B_PIN_OFF();}
+                        
+           byte vss4_3Limit = table2D_getValue(&shift4_3Table, currentStatus.TPS);
+            if(currentStatus.vss < vss4_3Limit)
+        {            
+           byte vss2_1Limit = table2D_getValue(&shift2_1Table, currentStatus.TPS);
+            if(currentStatus.vss < vss2_1Limit){A_PIN_ON();B_PIN_ON();}
+          
+           byte vss3_2Limit = table2D_getValue(&shift3_2Table, currentStatus.TPS);
+            if(currentStatus.vss < vss3_2Limit){B_PIN_ON();}
+                                     
+            if (currentStatus.RPMdiv100 > configPage15.ApinMaxRPMdiv100) 
+                {A_PIN_OFF();} 
+                                  
+            if (currentStatus.TPS < 86)
+             {            
+           byte vss1_2Limit = table2D_getValue(&shift1_2Table, currentStatus.TPS);
+            if(currentStatus.vss > vss1_2Limit){A_PIN_OFF();}                    
+             }  
+            if (currentStatus.RPMdiv100 > configPage15.BpinMaxRPMdiv100) 
+             {  
+              byte vss3_2Limit = table2D_getValue(&shift3_2Table, currentStatus.TPS);
+               if(currentStatus.vss > vss3_2Limit) {B_PIN_OFF();A_PIN_OFF();}                                    
+             }                               
+            if (currentStatus.TPS < 86) 
+             {
+           byte vss2_3Limit = table2D_getValue(&shift2_3Table, currentStatus.TPS);
+            if(currentStatus.vss > vss2_3Limit){B_PIN_OFF();A_PIN_OFF();}                     
+             }
+        }
+           byte vssunlocLimit = table2D_getValue(&unlockshiftTable, currentStatus.TPS);
+            if(currentStatus.vss < vssunlocLimit){C_PIN_OFF();}
+                         
+           byte vsslocLimit = table2D_getValue(&lockshiftTable, currentStatus.TPS);
+            if(currentStatus.vss > vsslocLimit){C_PIN_ON();} 
+
+  }
+}
 

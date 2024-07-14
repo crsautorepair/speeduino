@@ -7,6 +7,10 @@
 #include <util/atomic.h>
 #endif
 
+void initialiseTrannsCon(void);
+void TRANNSCONTROL(void);
+
+
 void initialiseAuxPWM(void);
 void boostControl(void);
 void boostDisable(void);
@@ -66,6 +70,7 @@ void wmiControl(void);
 #define FUEL_PUMP_OFF()         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { *pump_pin_port &= ~(pump_pin_mask);    }
 
 //Note the below macros cannot use ATOMIC_BLOCK(ATOMIC_RESTORESTATE) as they are called from within ternary operators. The ATOMIC_BLOCK wrapped is instead placed around the ternary call below
+
 #define FAN_PIN_LOW()           *fan_pin_port &= ~(fan_pin_mask)
 #define FAN_PIN_HIGH()          *fan_pin_port |= (fan_pin_mask)
 #define AIRCON_PIN_LOW()        *aircon_comp_pin_port &= ~(aircon_comp_pin_mask)
@@ -73,17 +78,36 @@ void wmiControl(void);
 #define AIRCON_FAN_PIN_LOW()    *aircon_fan_pin_port &= ~(aircon_fan_pin_mask)
 #define AIRCON_FAN_PIN_HIGH()   *aircon_fan_pin_port |= (aircon_fan_pin_mask)
 
+#define A_PIN_LOW()             *A_pin_port &= ~(A_pin_mask)
+#define A_PIN_HIGH()            *A_pin_port |= (A_pin_mask)
+#define B_PIN_LOW()             *B_pin_port &= ~(B_pin_mask)
+#define B_PIN_HIGH()            *B_pin_port |= (B_pin_mask)
+#define C_PIN_LOW()             *C_pin_port &= ~(C_pin_mask)
+#define C_PIN_HIGH()            *C_pin_port |= (C_pin_mask)
+#define inputN_PIN_LOW()        *inputN_pin_port &= ~(inputN_pin_mask)
+#define inputN_PIN_HIGH()       *inputN_pin_port |= (inputN_pin_mask)
+#define inputR_PIN_LOW()        *inputR_pin_port &= ~(inputR_pin_mask)
+#define inputR_PIN_HIGH()       *inputR_pin_port |= (inputR_pin_mask)
+
 #define AIRCON_ON()             ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { ((((configPage15.airConCompPol)==1)) ? AIRCON_PIN_LOW() : AIRCON_PIN_HIGH()); BIT_SET(currentStatus.airConStatus, BIT_AIRCON_COMPRESSOR); }
 #define AIRCON_OFF()            ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { ((((configPage15.airConCompPol)==1)) ? AIRCON_PIN_HIGH() : AIRCON_PIN_LOW()); BIT_CLEAR(currentStatus.airConStatus, BIT_AIRCON_COMPRESSOR); }
 #define AIRCON_FAN_ON()         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { ((((configPage15.airConFanPol)==1)) ? AIRCON_FAN_PIN_LOW() : AIRCON_FAN_PIN_HIGH()); BIT_SET(currentStatus.airConStatus, BIT_AIRCON_FAN); }
 #define AIRCON_FAN_OFF()        ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { ((((configPage15.airConFanPol)==1)) ? AIRCON_FAN_PIN_HIGH() : AIRCON_FAN_PIN_LOW()); BIT_CLEAR(currentStatus.airConStatus, BIT_AIRCON_FAN); }
-                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                            
 #define FAN_ON()                ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { ((configPage6.fanInv) ? FAN_PIN_LOW() : FAN_PIN_HIGH()); }
-#define FAN_OFF()               ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { ((configPage6.fanInv) ? FAN_PIN_HIGH() : FAN_PIN_LOW()); }
+#define FAN_OFF()               ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { ((configPage6.fanInv) ? FAN_PIN_HIGH() : FAN_PIN_LOW()); }                                                                                     
+
+#define A_PIN_OFF()           ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { *A_pin_port &= ~(A_pin_mask);}
+#define A_PIN_ON()            ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {*A_pin_port |= (A_pin_mask);}
+#define B_PIN_ON()            ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { ((configPage15.BpinPollarity == 1) ? B_PIN_LOW()  : B_PIN_HIGH());}
+#define B_PIN_OFF()           ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { ((configPage15.BpinPollarity == 1) ? B_PIN_HIGH() : B_PIN_LOW() );}
+#define C_PIN_OFF()           ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { *C_pin_port &= ~(C_pin_mask);}
+#define C_PIN_ON()            ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { *C_pin_port |= (C_pin_mask);}
+
+
 #endif
 
 #define READ_N2O_ARM_PIN()    ((*n2o_arming_pin_port & n2o_arming_pin_mask) ? true : false)
-
 
 #define VVT1_PIN_ON()     VVT1_PIN_HIGH();
 #define VVT1_PIN_OFF()    VVT1_PIN_LOW();
@@ -99,6 +123,16 @@ extern volatile PORT_TYPE *vvt2_pin_port;
 extern volatile PINMASK_TYPE vvt2_pin_mask;
 extern volatile PORT_TYPE *fan_pin_port;
 extern volatile PINMASK_TYPE fan_pin_mask;
+
+
+extern volatile PORT_TYPE *A_pin_port;
+extern volatile PINMASK_TYPE A_pin_mask;
+extern volatile PORT_TYPE *B_pin_port;
+extern volatile PINMASK_TYPE B_pin_mask;
+extern volatile PORT_TYPE *C_pin_port;
+extern volatile PINMASK_TYPE C_pin_mask;
+
+
 
 #if defined(PWM_FAN_AVAILABLE)//PWM fan not available on Arduino MEGA
 extern uint16_t fan_pwm_max_count; //Used for variable PWM frequency

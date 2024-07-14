@@ -243,8 +243,7 @@ byte pinSDEnable;
 byte pinAirConComp;     // Air conditioning compressor output (See: auxiliaries.ino)
 byte pinAirConFan;    // Stand-alone air conditioning fan output (See: auxiliaries.ino)
 byte pinAirConRequest;  // Air conditioning request input (See: auxiliaries.ino)
-byte pininputN;
-byte pininputR;
+
 byte pinA;
 byte pinB;
 byte pinC;
