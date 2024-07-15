@@ -84,10 +84,7 @@ void wmiControl(void);
 #define B_PIN_HIGH()            *B_pin_port |= (B_pin_mask)
 #define C_PIN_LOW()             *C_pin_port &= ~(C_pin_mask)
 #define C_PIN_HIGH()            *C_pin_port |= (C_pin_mask)
-#define inputN_PIN_LOW()        *inputN_pin_port &= ~(inputN_pin_mask)
-#define inputN_PIN_HIGH()       *inputN_pin_port |= (inputN_pin_mask)
-#define inputR_PIN_LOW()        *inputR_pin_port &= ~(inputR_pin_mask)
-#define inputR_PIN_HIGH()       *inputR_pin_port |= (inputR_pin_mask)
+
 
 #define AIRCON_ON()             ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { ((((configPage15.airConCompPol)==1)) ? AIRCON_PIN_LOW() : AIRCON_PIN_HIGH()); BIT_SET(currentStatus.airConStatus, BIT_AIRCON_COMPRESSOR); }
 #define AIRCON_OFF()            ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { ((((configPage15.airConCompPol)==1)) ? AIRCON_PIN_HIGH() : AIRCON_PIN_LOW()); BIT_CLEAR(currentStatus.airConStatus, BIT_AIRCON_COMPRESSOR); }
